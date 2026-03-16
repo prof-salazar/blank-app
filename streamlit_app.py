@@ -16,7 +16,7 @@ if 'reminders' not in st.session_state:
     st.session_state['reminders'] = pd.DataFrame(columns=['Name', 'Amount (€)', 'Category', 'Next Date', 'Frequency'])
 
 # --- SETUP GEMINI API ---
-GEMINI_API_KEY = "...." 
+GEMINI_API_KEY = "AIzaSyDppeQkQpXgxEocqyp5rLfyob8g2I7TEoc" 
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
