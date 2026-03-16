@@ -157,7 +157,7 @@ if uploaded_file:
                 
             st.divider()
             
-                    # --- NEW: Dynamic User Profile & Gemini Insights ---
+             # --- NEW: Dynamic User Profile & Gemini Insights ---
                 st.subheader("🤖 Financial Health Check & Roast")
                 
                 # 1. Let the user define themselves
