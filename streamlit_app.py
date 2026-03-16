@@ -153,10 +153,21 @@ if uploaded_file:
                 
             st.divider()
             
-            # Gemini Insights
-            st.subheader("🤖 Financial Health Check")
-            with st.spinner("Gemini is analyzing your spending patterns..."):
-                ai_advice = get_ai_insights(df)
+            # --- NEW: Dynamic User Profile & Gemini Insights ---
+        st.subheader("🤖 Financial Health Check & Roast")
+        
+        # 1. Let the user define themselves
+        p_col1, p_col2 = st.columns(2)
+        with p_col1:
+            user_persona = st.selectbox("Who are you?", ["Student", "Young Professional", "Freelancer", "Parent"])
+        with p_col2:
+            user_location = st.text_input("City/Location", value="Milan")
+            
+        # 2. Add a button to trigger the AI
+        if st.button("Generate Financial Roast"):
+            with st.spinner("Analyzing your terrible spending habits..."):
+                # Pass all THREE variables to the function now
+                ai_advice = get_ai_insights(df, user_persona, user_location)
             st.info(ai_advice)
 
         # ==========================================
