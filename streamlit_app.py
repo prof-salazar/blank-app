@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import altair as alt
 import google.generativeai as genai
 import calendar
 
@@ -61,17 +61,26 @@ if uploaded_file:
         
         with c1:
             st.metric("Total Monthly Spend", f"€{expenses_df['amount_abs'].sum():,.2f}")
-            # Filter pie chart to top 10 so it doesn't get overcrowded
+            
+            # Replaced Plotly Pie Chart with a clean Altair Horizontal Bar Chart
             top_expenses = expenses_df.groupby('description')['amount_abs'].sum().nlargest(10).reset_index()
-            fig = px.pie(top_expenses, values='amount_abs', names='description', title="Top 10 Expense Locations")
-            st.plotly_chart(fig, use_container_width=True)
+            
+            bar_chart = alt.Chart(top_expenses).mark_bar(cornerRadiusEnd=4).encode(
+                x=alt.X('amount_abs:Q', title="Amount (€)"),
+                y=alt.Y('description:N', sort='-x', title=""),
+                color=alt.Color('description:N', legend=None),
+                tooltip=['description', 'amount_abs']
+            ).properties(title="Top 10 Expense Locations")
+            
+            st.altair_chart(bar_chart, use_container_width=True)
             
         with c2:
             st.metric("Transaction Count", len(df))
+            
+            # Replaced Plotly Line Chart with Streamlit's Native Area Chart (Zero extra code!)
             daily = df.groupby('date')['amount'].sum().reset_index()
-            fig_line = px.area(daily, x='date', y='amount', title="Daily Balance Trend")
-            st.plotly_chart(fig_line, use_container_width=True)
-
+            st.markdown("**Daily Balance Trend**")
+            st.area_chart(daily, x='date', y='amount', color="#1f77b4")
     # ==========================================
     # TAB 2: AI & FORECASTING 
     # ==========================================
