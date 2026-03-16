@@ -29,21 +29,30 @@ def categorize(desc):
     if any(x in desc for x in ['salary', 'deposit', 'transfer']): return 'Income'
     return 'Other'
 
-def get_ai_insights(df):
-    """Sends financial summary to Gemini for advice."""
+def get_ai_insights(df, persona, location):
     expenses = df[df['amount'] < 0]
     total_spent = expenses['amount'].abs().sum()
-    top_merchants = expenses['description'].value_counts().head(5).index.tolist()
+    
+    # Get top 5 merchants with their actual spend amounts for better context
+    top_merchants = expenses.groupby('description')['amount'].abs().sum().nlargest(5)
+    merchant_string = ", ".join([f"{name} (€{amt:.2f})" for name, amt in top_merchants.items()])
     
     prompt = f"""
-    Act as a professional financial advisor. 
-    The user spent a total of €{total_spent:,.2f} this month.
-    Their top 5 frequent merchants are: {', '.join(top_merchants)}.
+    Act as a highly analytical and slightly blunt financial advisor. 
+    The user is a {persona} living in {location}.
+    They spent a total of €{total_spent:,.2f} this month.
+    Their top 5 expense locations are: {merchant_string}.
     
-    1. Give a 1-sentence 'Financial Health Grade' (A, B, or C) with a reason.
-    2. Give one specific 'Pro-Tip' for a student living in Milan to save money.
-    Keep the tone professional and concise.
+    Provide a 2-part assessment:
+    1. Financial Health Grade: (A, B, or C) with a 1-sentence brutally honest reason.
+    2. Roast & Replace: Look at their top merchants. Pick the most wasteful one (like a specific coffee shop, fast fashion brand, or food delivery app). Tell them exactly why it's a bad financial habit and provide a specific, cheaper, and realistic alternative based on their location ({location}) and lifestyle ({persona}). Be direct.
     """
+    
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+    except Exception as e:
+        return f"API Error: {str(e)}"
     
     try:
         response = model.generate_content(prompt)
