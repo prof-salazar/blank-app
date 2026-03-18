@@ -57,12 +57,6 @@ def get_ai_insights(df, persona, location):
         return response.text
     except Exception as e:
         return f"API Error: {str(e)}"
-    
-    try:
-        response = model.generate_content(prompt)
-        return response.text
-    except Exception as e:
-        return f"API Error: {str(e)}"
 
 # --- MAIN UI ---
 st.title("💰 MoneyTrace AI")
