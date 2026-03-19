@@ -40,7 +40,22 @@ def get_ai_insights(df, persona, location):
     # Get top 5 merchants with their actual spend amounts for better context
     top_merchants = expenses.groupby('description')['amount'].sum().abs().nlargest(3)
     merchant_string = ", ".join([f"{name} (€{amt:.2f})" for name, amt in top_merchants.items()])
+
+    # 1. Create an empty list to hold our formatted text
+    #merchant_list = []
     
+    # 2. Loop through the top merchants one by one
+    #for name, amt in top_merchants.items():
+        
+        # 3. Format the text nicely (e.g., "Zara (€50.00)")
+        #formatted_text = f"{name} (€{amt:.2f})"
+        
+        # 4. Add it to our growing list
+        #merchant_list.append(formatted_text)
+        
+    # 5. Glue the final list together with commas
+    #merchant_string = ", ".join(merchant_list)
+   
     prompt = f"""
     Act as a highly analytical and slightly blunt financial advisor. 
     The user is a {persona} living in {location}.
