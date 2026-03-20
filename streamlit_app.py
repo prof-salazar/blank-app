@@ -5,6 +5,8 @@ import altair as alt
 import google.generativeai as genai
 import calendar
 from datetime import datetime
+import os
+from dotenv import load_dotenv
 
 # --- 1. SETTING THE STAGE ---
 # Let's give the browser tab a nice title and make it wide so our charts have room to breathe
@@ -16,7 +18,8 @@ if 'reminders' not in st.session_state:
     st.session_state['reminders'] = pd.DataFrame(columns=['Name', 'Amount (€)', 'Category', 'Next Date', 'Frequency'])
 
 # --- SETUP GEMINI API ---
-GEMINI_API_KEY = "....." 
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
