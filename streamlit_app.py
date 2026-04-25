@@ -19,7 +19,7 @@ if 'reminders' not in st.session_state:
 
 # --- SETUP GEMINI API ---
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("AIzaSyC_88C4Gt9GH3yWXc8QV0cavT8fwzZ_Guw")
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
